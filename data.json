@@ -2,7 +2,7 @@
   "users": {
     "admin1": {
       "password": "adminpass",
-      "expiry": "2025-06-15",
+      "expiry": "2025-06-17",
       "active": true
     }
   },
