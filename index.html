@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Mod Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #2c3e50, #3498db);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      width: 320px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    .title {
+      font-size: 26px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    .desc {
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-bottom: 20px;
+    }
+    .error {
+      font-size: 14px;
+      color: red;
+      margin-bottom: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 12px 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="title" id="title">Loading...</div>
+    <div class="desc" id="desc"></div>
+    <div class="error" id="error"></div>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button id="action">Login</button>
+  </div>  <script>
+    const JSON_URL = "https://R0Y4L-KING.github.io/data.json"; // Update with your GitHub Pages URL
+
+    async function fetchData() {
+      const res = await fetch(JSON_URL);
+      const data = await res.json();
+      return data;
+    }
+
+    function isExpired(dateStr) {
+      const today = new Date();
+      const expiry = new Date(dateStr);
+      return today > expiry;
+    }
+
+    function showExpired(expiryDate) {
+      document.getElementById("title").innerText = "Access Expired";
+      document.getElementById("desc").innerHTML = `Your access expired on <b style='color:red;'>${expiryDate}</b>. Please renew to continue.`;
+      document.getElementById("action").innerText = "RENEW NOW";
+      document.getElementById("username").disabled = true;
+      document.getElementById("password").disabled = true;
+    }
+
+    async function init() {
+      const data = await fetchData();
+
+      document.getElementById("title").innerText = data.control.title;
+      document.getElementById("desc").innerText = data.control.description;
+      document.getElementById("action").innerText = data.control.button_text;
+
+      document.getElementById("action").onclick = () => {
+        const u = document.getElementById("username").value.trim();
+        const p = document.getElementById("password").value.trim();
+
+        if (!data.users[u]) {
+          document.getElementById("error").innerText = "User not found";
+          return;
+        }
+        if (!data.users[u].active) {
+          document.getElementById("error").innerText = "Account deactivated";
+          return;
+        }
+        if (isExpired(data.users[u].expiry)) {
+          showExpired(data.users[u].expiry);
+          return;
+        }
+        if (data.users[u].password !== p) {
+          document.getElementById("error").innerText = "Incorrect password";
+          return;
+        }
+        window.location.href = data.control.url;
+      };
+    }
+
+    init();
+  </script></body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "users": {
+    "admin1": {
+      "password": "adminpass",
+      "expiry": "2025-06-15",
+      "active": true
+    }
+  },
+  "control": {
+    "online": true,
+    "title": "Login",
+    "description": "Your Purchase complete? Please login...",
+    "button_text": "LOGIN",
+    "url": "https://your-download-link.com"
+  }
+}
