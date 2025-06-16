@@ -1,7 +1,7 @@
 {
   "users": {
-    "admin1": {
-      "password": "adminpass",
+    "@RelaxYC": {
+      "password": "KING",
       "expiry": "2025-06-15",
       "active": true
     }
